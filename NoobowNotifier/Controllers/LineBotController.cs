@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json.Linq;
 using System.Threading.Tasks;
-using NoobowNotifier.CloudStorage;
 using NoobowNotifier.Models;
 
 namespace NoobowNotifier.Controllers
