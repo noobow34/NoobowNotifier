@@ -13,14 +13,10 @@ namespace NoobowNotifier
     internal class LineBotApp : WebhookApplication
     {
         private LineMessagingClient messagingClient { get; }
-        private TableStorage<EventSourceState> sourceState { get; }
-        private BlobStorage blobStorage { get; }
 
-        public LineBotApp(LineMessagingClient lineMessagingClient, TableStorage<EventSourceState> tableStorage, BlobStorage blobStorage)
+        public LineBotApp(LineMessagingClient lineMessagingClient)
         {
             this.messagingClient = lineMessagingClient;
-            this.sourceState = tableStorage;
-            this.blobStorage = blobStorage;
         }
 
         #region Handlers
@@ -75,9 +71,6 @@ namespace NoobowNotifier
 
         protected override async Task OnFollowAsync(FollowEvent ev)
         {
-            // Store source information which follows the bot.
-            await sourceState.AddAsync(ev.Source.Type.ToString(), ev.Source.Id);
-
             var userName = "";
             if (!string.IsNullOrEmpty(ev.Source.Id))
             {
@@ -90,8 +83,6 @@ namespace NoobowNotifier
 
         protected override async Task OnUnfollowAsync(UnfollowEvent ev)
         {
-            // Remote source information which unfollows the bot.
-            await sourceState.DeleteAsync(ev.Source.Type.ToString(), ev.Source.Id);
         }
 
         protected override async Task OnJoinAsync(JoinEvent ev)
@@ -101,7 +92,7 @@ namespace NoobowNotifier
 
         protected override async Task OnLeaveAsync(LeaveEvent ev)
         {
-            await sourceState.DeleteAsync(ev.Source.Type.ToString(), ev.Source.Id);
+
         }
 
         protected override async Task OnBeaconAsync(BeaconEvent ev)
@@ -265,27 +256,7 @@ namespace NoobowNotifier
         /// </summary>
         private async Task HandleMediaAsync(EventMessageType type, string replyToken, string messageId, string blobDirectoryName, string blobName)
         {
-            var stream = await messagingClient.GetContentStreamAsync(messageId);
-            var ext = GetFileExtension(stream.ContentHeaders.ContentType.MediaType);
-            var uri = await blobStorage.UploadFromStreamAsync(stream, blobDirectoryName, blobName + ext);
-            ISendMessage reply = null;
-            switch (type)
-            {
-                case EventMessageType.Audio:
-                    reply = new AudioMessage(uri.ToString(), 100);
-                    break;
-                case EventMessageType.Image:
-                    reply = new ImageMessage(uri.ToString(), uri.ToString());
-                    break;
-                case EventMessageType.Video:
-                    reply = new VideoMessage(uri.ToString(), "https://linetestbot123.blob.core.windows.net/linebotcontainer/User_U21d2cd1795be4caa1a32d069fe7b323f/7015056697532.jpeg");
-                    break;
-                case EventMessageType.File:
-                    reply = new TextMessage(uri.ToString());
-                    break;
-            }
-            await messagingClient.ReplyMessageAsync(replyToken, new List<ISendMessage> { reply });
-            //await messagingClient.ReplyMessageAsync(replyToken, uri.ToString());
+
         }
 
         /// <summary>

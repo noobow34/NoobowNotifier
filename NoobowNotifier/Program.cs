@@ -20,7 +20,7 @@ namespace NoobowNotifier
         public static IWebHost BuildWebHost(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
                 .UseStartup<Startup>()
-                .UseUrls("http://localhost:4000","https://localhost:4001")
+                .UseUrls("http://localhost:4000")
                 .Build();
     }
 }

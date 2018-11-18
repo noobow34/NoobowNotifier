@@ -18,7 +18,12 @@ namespace NoobowNotifier.Controllers
         public LineBotController(IOptions<AppSettings> options)
         {
             appsettings = options.Value;
-            lineMessagingClient = new LineMessagingClient(appsettings.LineSettings.ChannelAccessToken);
+#if DEBUG
+            lineMessagingClient = new LineMessagingClient(appsettings.LineSettings.ChannelAccessToken,
+                "http://localhost:8080");
+#else
+    lineMessagingClient = new LineMessagingClient(appsettings.LineSettings.ChannelAccessToken);
+#endif
         }
 
         /// <summary>
@@ -29,11 +34,8 @@ namespace NoobowNotifier.Controllers
         public async Task<IActionResult> Post([FromBody]JToken req)
         { 
             var events = WebhookEventParser.Parse(req.ToString());
-            var connectionString = appsettings.LineSettings.StorageConnectionString;
-            var blobStorage = await BlobStorage.CreateAsync(connectionString, "linebotcontainer");
-            var eventSourceState = await TableStorage<EventSourceState>.CreateAsync(connectionString, "eventsourcestate");
 
-            var app = new LineBotApp(lineMessagingClient, eventSourceState, blobStorage);
+            var app = new LineBotApp(lineMessagingClient);
             await app.RunAsync(events);
             return new OkResult();
         }
