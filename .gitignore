@@ -7,7 +7,7 @@
 *.sln.docstates
 
 .vs/
-ja-fleet_db/
+keys/
 
 # Build results
 
