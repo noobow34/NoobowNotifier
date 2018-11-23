@@ -12,6 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="AngleSharp" Version="0.9.11" />
     <PackageReference Include="Google.Apis.AnalyticsReporting.v4" Version="1.36.1.1391" />
     <PackageReference Include="Line.Messaging" Version="1.4.2" />
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.1.4" />

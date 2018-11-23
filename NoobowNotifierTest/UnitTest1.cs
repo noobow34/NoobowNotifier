@@ -1,6 +1,7 @@
 using Google.Apis.AnalyticsReporting.v4.Data;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NoobowNotifier.Constants;
+using NoobowNotifier.Logics;
 using NoobowNotifier.Services;
 using System;
 using System.Collections.Generic;
@@ -48,5 +49,12 @@ namespace NoobowNotifierTest
                 }
             }
         }
+
+        [TestMethod]
+        public void JPTestAsync()
+        {
+            JPLogics.GetJetPhotosFromRegistrationNumberAsync("JA801A");
+        }
+
     }
 }

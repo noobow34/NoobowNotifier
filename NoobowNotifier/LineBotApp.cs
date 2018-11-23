@@ -30,13 +30,18 @@ namespace NoobowNotifier
 
         private async Task HandleTextAsync(string replyToken, string userMessage, string userId)
         {
-            userMessage = userMessage.ToLower().Replace(" ", "");
+            var message = userMessage.Split(" ");
             ISendMessage replyMessage = null;
 
-            switch (userMessage)
+            switch (message[0])
             {
                 case CommandConstant.JAFLEET_GA:
                     replyMessage = new TextMessage(GALogics.GetReportStringMyNormal1());
+                    break;
+                case CommandConstant.JETPHOTS:
+                    string reg = message[1];
+                    (string photolarge, string photosmall)  = await JPLogics.GetJetPhotosFromRegistrationNumberAsync(reg);
+                    replyMessage = new ImageMessage(photolarge, photosmall);
                     break;
                 default:
                     break;
