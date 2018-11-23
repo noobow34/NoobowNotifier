@@ -41,7 +41,7 @@ namespace NoobowNotifier
                 case CommandConstant.JETPHOTS:
                     string reg = message[1];
                     (string photolarge, string photosmall)  = await JPLogics.GetJetPhotosFromRegistrationNumberAsync(reg);
-                    replyMessage = new ImageMessage(photolarge, photosmall);
+                    replyMessage = new ImageMessage(photolarge, "https:" + photosmall);
                     break;
                 default:
                     break;
