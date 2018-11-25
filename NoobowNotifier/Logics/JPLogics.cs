@@ -37,7 +37,7 @@ namespace NoobowNotifier.Logics
                     }
                 }
             }
-            catch (Exception ex)
+            catch
             {
 
             }
