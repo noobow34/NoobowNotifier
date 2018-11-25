@@ -78,9 +78,9 @@ namespace NoobowNotifier.Logics
                 yesterdayEx = context.Log.Where(q => q.LogDate.StartsWith(yesterdaySqlite)).Where(q => q.LogType == LogType.EXCEPTION).Where(q => q.UserId != "True").Where(q => q.UserId != "U68e05e69b6acbaaf565bc616fdef695d").OrderByDescending(q => q.LogDate).Count();
             }
             return $"今日：u{todayUsers},s{todaySessions},pv{todayPageViews}\n" +
-                $"p{todayPhoto},l{todayLine},s{todaySearch},e{todayEx}\n" +
+                $"　　　p{todayPhoto},l{todayLine},s{todaySearch},e{todayEx}\n" +
                 $"昨日：u{yesterdayUsers},s{yesterdaySessions},pv{yesterdayPageViews}\n" +
-                $"p{yesterdayPhoto},l{yesterdayLine},s{yesterdaySearch},e{yesterdayEx}";
+                $"　　　p{yesterdayPhoto},l{yesterdayLine},s{yesterdaySearch},e{yesterdayEx}";
         }
     }
 }
