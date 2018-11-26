@@ -48,6 +48,10 @@ namespace NoobowNotifier
             }
 
             await messagingClient.ReplyMessageAsync(replyToken, new List<ISendMessage> { replyMessage });
+
+            await Task.Delay(10000);
+
+            await messagingClient.PushMessageAsync(userId, new List<ISendMessage> { new TextMessage("プッシュテスト") });
         }
 
         private string GetFileExtension(string mediaType)
