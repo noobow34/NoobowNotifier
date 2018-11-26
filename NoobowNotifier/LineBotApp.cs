@@ -31,6 +31,8 @@ namespace NoobowNotifier
         private async Task HandleTextAsync(string replyToken, string userMessage, string userId)
         {
             var message = userMessage.Split(" ");
+            DateTime pushTime = DateTime.Now;
+            bool doPush = false;
             ISendMessage replyMessage = null;
 
             switch (message[0])
@@ -43,15 +45,31 @@ namespace NoobowNotifier
                     (string photolarge, string photosmall)  = await JPLogics.GetJetPhotosFromRegistrationNumberAsync(reg);
                     replyMessage = new ImageMessage(photolarge, "https:" + photosmall);
                     break;
+                case CommandConstant.PLAN_NOTICE:
+                    doPush = DateTime.TryParseExact("20" + message[1], "yyyyMMddHHmm", null, System.Globalization.DateTimeStyles.None, out pushTime);
+                    string mes;
+                    if (doPush) {
+                        mes = "予約しました";
+                    }
+                    else
+                    {
+                        mes = "予約に失敗しました";
+                    }
+                    replyMessage = new TextMessage(mes);
+                    break;
                 default:
                     break;
             }
 
             await messagingClient.ReplyMessageAsync(replyToken, new List<ISendMessage> { replyMessage });
 
-            await Task.Delay(10000);
+            if (doPush)
+            {
+                int sleepTime = (int)(pushTime - DateTime.Now).TotalMilliseconds;
+                await Task.Delay(sleepTime);
+                await messagingClient.PushMessageAsync(userId,new List<ISendMessage>{ new TextMessage(message[2]) });
+            }
 
-            await messagingClient.PushMessageAsync(userId, new List<ISendMessage> { new TextMessage("プッシュテスト") });
         }
 
         private string GetFileExtension(string mediaType)
