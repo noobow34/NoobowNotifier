@@ -46,7 +46,23 @@ namespace NoobowNotifier
                     replyMessage = new ImageMessage(photolarge, "https:" + photosmall);
                     break;
                 case CommandConstant.PLAN_NOTICE:
-                    doPush = DateTime.TryParseExact("20" + message[1], "yyyyMMddHHmm", null, System.Globalization.DateTimeStyles.None, out pushTime);
+                    string additional = string.Empty;
+                    if (message[1].StartsWith("a"))
+                    {
+                        message[1] = DateTime.Now.AddMinutes(Int32.Parse(message[0].Replace("a", string.Empty))).ToString("yyyyMMddHHmm");
+                    }else if(message[0].Length == 4)
+                    {
+                        additional = DateTime.Now.ToString("yyyyMMdd");
+                    }
+                    else if(message[0].Length == 8)
+                    {
+                        additional = DateTime.Now.ToString("yyyy");
+                    }else if(message[9].Length == 10)
+                    {
+                        additional = "20";
+                    }
+
+                    doPush = DateTime.TryParseExact(additional + message[1], "yyyyMMddHHmm", null, System.Globalization.DateTimeStyles.None, out pushTime);
                     string mes;
                     if (doPush) {
                         mes = "予約しました";
