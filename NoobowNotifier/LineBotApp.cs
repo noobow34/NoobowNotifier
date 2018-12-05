@@ -49,15 +49,15 @@ namespace NoobowNotifier
                     string additional = string.Empty;
                     if (message[1].StartsWith("a"))
                     {
-                        message[1] = DateTime.Now.AddMinutes(Int32.Parse(message[0].Replace("a", string.Empty))).ToString("yyyyMMddHHmm");
-                    }else if(message[0].Length == 4)
+                        message[1] = DateTime.Now.AddMinutes(Int32.Parse(message[1].Replace("a", string.Empty))).ToString("yyyyMMddHHmm");
+                    }else if(message[1].Length == 4)
                     {
                         additional = DateTime.Now.ToString("yyyyMMdd");
                     }
-                    else if(message[0].Length == 8)
+                    else if(message[1].Length == 8)
                     {
                         additional = DateTime.Now.ToString("yyyy");
-                    }else if(message[9].Length == 10)
+                    }else if(message[1].Length == 10)
                     {
                         additional = "20";
                     }
