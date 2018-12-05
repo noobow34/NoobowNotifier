@@ -83,7 +83,12 @@ namespace NoobowNotifier
             {
                 int sleepTime = (int)(pushTime - DateTime.Now).TotalMilliseconds;
                 await Task.Delay(sleepTime);
-                await messagingClient.PushMessageAsync(userId,new List<ISendMessage>{ new TextMessage(message[2]) });
+                var quickReply = new QuickReply();
+                quickReply.Items.Add(new QuickReplyButtonObject(new MessageTemplateAction("5分後", $"{CommandConstant.PLAN_NOTICE} a5 {message[2]}")));
+                quickReply.Items.Add(new QuickReplyButtonObject(new MessageTemplateAction("10分後", $"{CommandConstant.PLAN_NOTICE} a10 {message[2]}")));
+                quickReply.Items.Add(new QuickReplyButtonObject(new MessageTemplateAction("30分後", $"{CommandConstant.PLAN_NOTICE} a30 {message[2]}")));
+                quickReply.Items.Add(new QuickReplyButtonObject(new MessageTemplateAction("1時間後", $"{CommandConstant.PLAN_NOTICE} a60 {message[2]}")));
+                await messagingClient.PushMessageAsync(userId,new List<ISendMessage>{ new TextMessage(message[2],quickReply) });
             }
 
         }
