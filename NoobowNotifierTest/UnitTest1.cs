@@ -50,11 +50,5 @@ namespace NoobowNotifierTest
             }
         }
 
-        [TestMethod]
-        public void JPTestAsync()
-        {
-            JPLogics.GetJetPhotosFromRegistrationNumberAsync("JA801A");
-        }
-
     }
 }
