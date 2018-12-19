@@ -40,11 +40,6 @@ namespace NoobowNotifier
                 case CommandConstant.JAFLEET_GA:
                     replyMessage = new TextMessage(GALogics.GetReportStringMyNormal1());
                     break;
-                case CommandConstant.JETPHOTS:
-                    string reg = message[1];
-                    (string photolarge, string photosmall)  = await JPLogics.GetJetPhotosFromRegistrationNumberAsync(reg);
-                    replyMessage = new ImageMessage(photolarge, "https:" + photosmall);
-                    break;
                 case CommandConstant.PLAN_NOTICE:
                     string additional = string.Empty;
                     if (message[1].StartsWith("a"))
