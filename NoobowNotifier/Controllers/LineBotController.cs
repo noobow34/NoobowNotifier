@@ -5,6 +5,7 @@ using Microsoft.Extensions.Options;
 using Newtonsoft.Json.Linq;
 using System.Threading.Tasks;
 using NoobowNotifier.Models;
+using NoobowNotifier.Manager;
 
 namespace NoobowNotifier.Controllers
 {
@@ -12,19 +13,6 @@ namespace NoobowNotifier.Controllers
     [Route("api/[controller]")]
     public class LineBotController : Controller
     {
-        private static LineMessagingClient lineMessagingClient;
-        AppSettings appsettings;
-        public LineBotController(IOptions<AppSettings> options)
-        {
-            appsettings = options.Value;
-#if DEBUG
-            lineMessagingClient = new LineMessagingClient(appsettings.LineSettings.ChannelAccessToken,
-                "http://localhost:8080");
-#else
-    lineMessagingClient = new LineMessagingClient(appsettings.LineSettings.ChannelAccessToken);
-#endif
-        }
-
         /// <summary>
         /// POST: api/Messages
         /// Receive a message from a user and reply to it
@@ -34,7 +22,7 @@ namespace NoobowNotifier.Controllers
         { 
             var events = WebhookEventParser.Parse(req.ToString());
 
-            var app = new LineBotApp(lineMessagingClient);
+            var app = new LineBotApp();
             await app.RunAsync(events);
             return new OkResult();
         }
