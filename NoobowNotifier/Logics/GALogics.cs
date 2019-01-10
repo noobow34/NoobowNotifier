@@ -9,11 +9,11 @@ using System.Threading.Tasks;
 
 namespace NoobowNotifier.Logics
 {
-    public class GALogics
+    public static class GALogics
     {
+        private static GA ga = new GA(GAConstant.CERT_JSON_PATH, GAConstant.JAFLEET_ID);
         public static string GetReportStringMyNormal1()
         {
-            var ga = new GA(GAConstant.CERT_JSON_PATH, GAConstant.JAFLEET_ID);
             var garesults = ga.GetReportMyNormal1();
 
             int todayUsers=0, todaySessions=0, todayPageViews = 0;
