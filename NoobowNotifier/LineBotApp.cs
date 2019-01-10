@@ -2,6 +2,7 @@ using Line.Messaging;
 using Line.Messaging.Webhooks;
 using NoobowNotifier.Constants;
 using NoobowNotifier.Logics;
+using NoobowNotifier.Manager;
 using NoobowNotifier.Services;
 using System;
 using System.Collections.Generic;
@@ -11,13 +12,6 @@ namespace NoobowNotifier
 {
     internal class LineBotApp : WebhookApplication
     {
-        private LineMessagingClient messagingClient { get; }
-
-        public LineBotApp(LineMessagingClient lineMessagingClient)
-        {
-            this.messagingClient = lineMessagingClient;
-        }
-
         protected override async Task OnMessageAsync(MessageEvent ev)
         {
             switch (ev.Message.Type)
@@ -72,7 +66,7 @@ namespace NoobowNotifier
                     break;
             }
 
-            await messagingClient.ReplyMessageAsync(replyToken, new List<ISendMessage> { replyMessage });
+            await LineMessagingClientManager.GetInstance().ReplyMessageAsync(replyToken, new List<ISendMessage> { replyMessage });
 
             if (doPush)
             {
@@ -83,23 +77,7 @@ namespace NoobowNotifier
                 quickReply.Items.Add(new QuickReplyButtonObject(new MessageTemplateAction("10分後", $"{CommandConstant.PLAN_NOTICE} a10 {message[2]}")));
                 quickReply.Items.Add(new QuickReplyButtonObject(new MessageTemplateAction("30分後", $"{CommandConstant.PLAN_NOTICE} a30 {message[2]}")));
                 quickReply.Items.Add(new QuickReplyButtonObject(new MessageTemplateAction("1時間後", $"{CommandConstant.PLAN_NOTICE} a60 {message[2]}")));
-                await messagingClient.PushMessageAsync(userId,new List<ISendMessage>{ new TextMessage(message[2],quickReply) });
-            }
-
-        }
-
-        private string GetFileExtension(string mediaType)
-        {
-            switch (mediaType)
-            {
-                case "image/jpeg":
-                    return ".jpeg";
-                case "audio/x-m4a":
-                    return ".m4a";
-                case "video/mp4":
-                    return ".mp4";
-                default:
-                    return "";
+                await LineMessagingClientManager.GetInstance()..PushMessageAsync(userId,new List<ISendMessage>{ new TextMessage(message[2],quickReply) });
             }
         }
     }
