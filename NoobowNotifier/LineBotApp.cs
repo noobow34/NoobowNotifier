@@ -77,7 +77,7 @@ namespace NoobowNotifier
                 quickReply.Items.Add(new QuickReplyButtonObject(new MessageTemplateAction("10分後", $"{CommandConstant.PLAN_NOTICE} a10 {message[2]}")));
                 quickReply.Items.Add(new QuickReplyButtonObject(new MessageTemplateAction("30分後", $"{CommandConstant.PLAN_NOTICE} a30 {message[2]}")));
                 quickReply.Items.Add(new QuickReplyButtonObject(new MessageTemplateAction("1時間後", $"{CommandConstant.PLAN_NOTICE} a60 {message[2]}")));
-                await LineMessagingClientManager.GetInstance()..PushMessageAsync(userId,new List<ISendMessage>{ new TextMessage(message[2],quickReply) });
+                await LineMessagingClientManager.GetInstance().PushMessageAsync(userId,new List<ISendMessage>{ new TextMessage(message[2],quickReply) });
             }
         }
     }
