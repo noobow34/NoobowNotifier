@@ -1,10 +1,7 @@
-using Line.Messaging;
 using Line.Messaging.Webhooks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
 using Newtonsoft.Json.Linq;
 using System.Threading.Tasks;
-using NoobowNotifier.Models;
 using NoobowNotifier.Manager;
 
 namespace NoobowNotifier.Controllers
@@ -22,7 +19,7 @@ namespace NoobowNotifier.Controllers
         { 
             var events = WebhookEventParser.Parse(req.ToString());
 
-            var app = new LineBotApp();
+            var app = new LineBotApp(LineMessagingClientManager.GetInstance());
             await app.RunAsync(events);
             return new OkResult();
         }

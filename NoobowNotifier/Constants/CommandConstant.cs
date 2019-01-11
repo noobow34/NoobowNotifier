@@ -9,6 +9,5 @@ namespace NoobowNotifier.Constants
     {
         public const string JAFLEET_GA = "あ";
         public const string PLAN_NOTICE = "よ";
-        public const string JETPHOTS = "jp";
     }
 }
