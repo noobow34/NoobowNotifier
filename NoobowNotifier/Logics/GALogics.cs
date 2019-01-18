@@ -1,5 +1,5 @@
-﻿using jafleet.Constants;
-using jafleet.EF;
+﻿using jafleet.Commons.Constants;
+using jafleet.Commons.EF;
 using NoobowNotifier.Constants;
 using NoobowNotifier.Services;
 using System;
