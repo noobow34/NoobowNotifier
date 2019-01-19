@@ -61,28 +61,22 @@ namespace NoobowNotifier.Logics
                 }
             }
 
-            DateTime today = DateTime.Now.Date;
-            DateTime tomorrow = today.AddDays(1);
-            DateTime yesterday = today.AddDays(-1);
-            string yesterdaySqlite = DateTime.Now.AddDays(-1).ToString("yyyy-MM-dd");
-            int todayPhoto = 0, todayLine = 0, todaySearch = 0, todayEx = 0;
-            int yesterdayPhoto = 0, yesterdayLine = 0, yesterdaySearch = 0, yesterdayEx = 0;
+            string today = DateTime.Now.Date.ToString("yyyyMMdd");
+            string yesterday = DateTime.Now.AddDays(-1).ToString("yyyyMMdd");
+            List<DailyStatistics> ds;
 
             using (var context = new jafleetContext())
             {
-                todayPhoto = context.Log.Where(q => q.LogDate >= today && q.LogDate < tomorrow && q.LogType == LogType.PHOTO && q.UserId != "True" && q.UserId != "U68e05e69b6acbaaf565bc616fdef695d").OrderByDescending(q => q.LogDate).Count();
-                todayLine = context.Log.Where(q => q.LogDate >= today && q.LogDate < tomorrow && q.LogType == LogType.LINE &&  q.UserId != "True" && q.UserId != "U68e05e69b6acbaaf565bc616fdef695d").OrderByDescending(q => q.LogDate).Count();
-                todaySearch = context.Log.Where(q => q.LogDate >= today && q.LogDate < tomorrow && q.LogType == LogType.SEARCH && q.UserId != "True" && q.UserId != "U68e05e69b6acbaaf565bc616fdef695d").OrderByDescending(q => q.LogDate).Count();
-                todayEx = context.Log.Where(q => q.LogDate >= today && q.LogDate < tomorrow && q.LogType == LogType.EXCEPTION && q.UserId != "True" && q.UserId != "U68e05e69b6acbaaf565bc616fdef695d").OrderByDescending(q => q.LogDate).Count();
-                yesterdayPhoto = context.Log.Where(q => q.LogDate >= yesterday && q.LogDate < today && q.LogType == LogType.PHOTO && q.UserId != "True" && q.UserId != "U68e05e69b6acbaaf565bc616fdef695d").OrderByDescending(q => q.LogDate).Count();
-                yesterdayLine = context.Log.Where(q => q.LogDate >= yesterday && q.LogDate < today && q.LogType == LogType.LINE && q.UserId != "True" && q.UserId != "U68e05e69b6acbaaf565bc616fdef695d").OrderByDescending(q => q.LogDate).Count();
-                yesterdaySearch = context.Log.Where(q => q.LogDate >= yesterday && q.LogDate < today && q.LogType == LogType.SEARCH && q.UserId != "True" && q.UserId != "U68e05e69b6acbaaf565bc616fdef695d").OrderByDescending(q => q.LogDate).Count();
-                yesterdayEx = context.Log.Where(q => q.LogDate >= yesterday && q.LogDate < today && q.LogType == LogType.EXCEPTION && q.UserId != "True" && q.UserId != "U68e05e69b6acbaaf565bc616fdef695d").OrderByDescending(q => q.LogDate).Count();
+                ds = context.DailyStatistics.Where(q => q.LogDateYyyyMmDd == today || q.LogDateYyyyMmDd == yesterday).ToList();
             }
+
+            var dsToday = ds.Where(q => q.LogDateYyyyMmDd == today).FirstOrDefault();
+            var dsYesterday = ds.Where(q => q.LogDateYyyyMmDd == yesterday).FirstOrDefault();
+
             return $"今日：u{todayUsers},s{todaySessions},pv{todayPageViews}\n" +
-                $"　　　p{todayPhoto},l{todayLine},s{todaySearch},e{todayEx}\n" +
+                $"　　　p{dsToday?.PhotoCount ?? 0},l{dsToday?.LineCount ?? 0},s{dsToday?.SearchCount ?? 0},e{dsToday?.ExCount ?? 0}\n" +
                 $"昨日：u{yesterdayUsers},s{yesterdaySessions},pv{yesterdayPageViews}\n" +
-                $"　　　p{yesterdayPhoto},l{yesterdayLine},s{yesterdaySearch},e{yesterdayEx}";
+                $"　　　p{dsYesterday?.PhotoCount ?? 0},l{dsYesterday?.LineCount ?? 0},s{dsYesterday?.SearchCount ?? 0},e{dsYesterday?.ExCount ?? 0}";
         }
     }
 }
