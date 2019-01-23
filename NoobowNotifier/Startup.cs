@@ -11,6 +11,7 @@ using Microsoft.Extensions.Options;
 using NoobowNotifier.Models;
 using NoobowNotifier.Middleware;
 using Microsoft.AspNetCore.Http.Internal;
+using jafleet.Commons.EF;
 
 namespace NoobowNotifier
 {
@@ -25,6 +26,7 @@ namespace NoobowNotifier
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddDbContext<jafleetContext>();
             services.AddMvc();
             services.Configure<AppSettings>(Configuration);
         }

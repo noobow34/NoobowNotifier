@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Linq;
 using System.Threading.Tasks;
 using NoobowNotifier.Manager;
+using jafleet.Commons.EF;
 
 namespace NoobowNotifier.Controllers
 {
@@ -10,6 +11,12 @@ namespace NoobowNotifier.Controllers
     [Route("api/[controller]")]
     public class LineBotController : Controller
     {
+        private readonly jafleetContext _context;
+        public LineBotController(jafleetContext context)
+        {
+            _context = context;
+        }
+
         /// <summary>
         /// POST: api/Messages
         /// Receive a message from a user and reply to it
@@ -19,7 +26,7 @@ namespace NoobowNotifier.Controllers
         { 
             var events = WebhookEventParser.Parse(req.ToString());
 
-            var app = new LineBotApp(LineMessagingClientManager.GetInstance());
+            var app = new LineBotApp(LineMessagingClientManager.GetInstance(),_context);
             await app.RunAsync(events);
             return new OkResult();
         }

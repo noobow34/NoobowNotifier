@@ -1,3 +1,4 @@
+using jafleet.Commons.EF;
 using Line.Messaging;
 using Line.Messaging.Webhooks;
 using NoobowNotifier.Constants;
@@ -11,10 +12,12 @@ namespace NoobowNotifier
     internal class LineBotApp : WebhookApplication
     {
         private LineMessagingClient messagingClient { get; }
+        private readonly jafleetContext _context;
 
-        public LineBotApp(LineMessagingClient lineMessagingClient)
+        public LineBotApp(LineMessagingClient lineMessagingClient, jafleetContext context)
         {
             this.messagingClient = lineMessagingClient;
+            _context = context;
         }
 
         protected override async Task OnMessageAsync(MessageEvent ev)
