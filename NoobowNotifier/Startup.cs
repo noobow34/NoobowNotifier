@@ -1,17 +1,11 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using NoobowNotifier.Models;
 using NoobowNotifier.Middleware;
-using Microsoft.AspNetCore.Http.Internal;
 using jafleet.Commons.EF;
+using Microsoft.AspNetCore.Mvc;
 
 namespace NoobowNotifier
 {
@@ -27,7 +21,7 @@ namespace NoobowNotifier
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<jafleetContext>();
-            services.AddMvc();
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2); ;
             services.Configure<AppSettings>(Configuration);
         }
 
