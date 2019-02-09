@@ -40,7 +40,7 @@ namespace NoobowNotifier
             switch (message[0])
             {
                 case CommandConstant.JAFLEET_GA:
-                    replyMessage = new TextMessage(GALogics.GetReportStringMyNormal1());
+                    replyMessage = new TextMessage(GALogics.GetReportStringMyNormal1(_context));
                     break;
                 case CommandConstant.PLAN_NOTICE:
                     string additional = string.Empty;

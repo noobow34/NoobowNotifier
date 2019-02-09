@@ -1,18 +1,16 @@
-﻿using jafleet.Commons.Constants;
-using jafleet.Commons.EF;
+﻿using jafleet.Commons.EF;
 using NoobowNotifier.Constants;
 using NoobowNotifier.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace NoobowNotifier.Logics
 {
     public static class GALogics
     {
         private static GA ga = new GA(GAConstant.CERT_JSON_PATH, GAConstant.JAFLEET_ID);
-        public static string GetReportStringMyNormal1()
+        public static string GetReportStringMyNormal1(jafleetContext context)
         {
             var garesults = ga.GetReportMyNormal1();
 
@@ -65,10 +63,7 @@ namespace NoobowNotifier.Logics
             string yesterday = DateTime.Now.AddDays(-1).ToString("yyyyMMdd");
             List<DailyStatistics> ds;
 
-            using (var context = new jafleetContext())
-            {
-                ds = context.DailyStatistics.Where(q => q.LogDateYyyyMmDd == today || q.LogDateYyyyMmDd == yesterday).ToList();
-            }
+            ds = context.DailyStatistics.Where(q => q.LogDateYyyyMmDd == today || q.LogDateYyyyMmDd == yesterday).ToList();
 
             var dsToday = ds.Where(q => q.LogDateYyyyMmDd == today).FirstOrDefault();
             var dsYesterday = ds.Where(q => q.LogDateYyyyMmDd == yesterday).FirstOrDefault();
