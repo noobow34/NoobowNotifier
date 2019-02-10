@@ -49,7 +49,12 @@ namespace NoobowNotifier
                 app.UseDeveloperExceptionPage();
             }
             app.UseLineValidationMiddleware(Configuration.GetSection("LineSettings")["ChannelSecret"]);
-            app.UseMvc();
+            app.UseMvc(routes =>
+            {
+                routes.MapRoute(
+                       name: "default",
+                       template: "{controller=Home}/{action=Index}");
+            });
         }        
     }
 }
