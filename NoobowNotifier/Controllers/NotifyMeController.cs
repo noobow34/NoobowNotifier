@@ -1,6 +1,6 @@
 using Line.Messaging;
 using Microsoft.AspNetCore.Mvc;
-using NoobowNotifier.Constants;
+using Noobow.Commons.Constants;
 using NoobowNotifier.Manager;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -11,7 +11,7 @@ namespace NoobowNotifier.Controllers
     {
         public async Task<IActionResult> Index([FromForm]string message)
         {
-            await LineMessagingClientManager.GetInstance().PushMessageAsync(UserIdConstant.NOOBWO_USER_ID, new List<ISendMessage>() { new TextMessage(message) });
+            await LineMessagingClientManager.GetInstance().PushMessageAsync(LineUserIdConstant.NOOBWO, new List<ISendMessage>() { new TextMessage(message) });
             return new OkResult();
         }
     }
