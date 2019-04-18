@@ -9,9 +9,10 @@ namespace NoobowNotifier.Controllers
 {
     public class NotifyMeController : Controller
     {
-        public async Task<IActionResult> Index([FromForm]string message)
+        public async Task<IActionResult> Index([FromForm]string message,string text)
         {
-            await LineMessagingClientManager.GetInstance().PushMessageAsync(LineUserIdConstant.NOOBWO, new List<ISendMessage>() { new TextMessage(message) });
+            string sendMessage = message ?? text ?? "‹ó’Ê’m";
+            await LineMessagingClientManager.GetInstance().PushMessageAsync(LineUserIdConstant.NOOBWO, new List<ISendMessage>() { new TextMessage(sendMessage) });
             return new OkResult();
         }
     }
