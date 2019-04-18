@@ -11,7 +11,7 @@ namespace NoobowNotifier.Controllers
     {
         public async Task<IActionResult> Index([FromForm]string message,string text)
         {
-            string sendMessage = message ?? text ?? "��ʒm";
+            string sendMessage = message ?? text ?? "空通知";
             await LineMessagingClientManager.GetInstance().PushMessageAsync(LineUserIdConstant.NOOBWO, new List<ISendMessage>() { new TextMessage(sendMessage) });
             return new OkResult();
         }
