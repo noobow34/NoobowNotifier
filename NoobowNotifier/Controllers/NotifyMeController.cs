@@ -12,6 +12,7 @@ namespace NoobowNotifier.Controllers
     {
         public async Task<IActionResult> Index([FromForm]string message,string text)
         {
+            Console.WriteLine($"受信:{DateTime.Now.ToString()}");
             string sendMessage = message ?? text ?? "空通知";
             try
             {
