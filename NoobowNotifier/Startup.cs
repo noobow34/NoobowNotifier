@@ -10,6 +10,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
 using System;
 using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
+using Noobow.Commons.EF;
 
 namespace NoobowNotifier
 {
@@ -33,6 +34,13 @@ namespace NoobowNotifier
 
             services.AddDbContextPool<jafleetContext>(
                 options => options.UseLoggerFactory(loggerFactory).UseMySql(Configuration.GetConnectionString("DefaultConnection"),
+                    mySqlOptions =>
+                    {
+                        mySqlOptions.ServerVersion(new Version(10, 3), ServerType.MariaDb);
+                    }
+            ));
+            services.AddDbContextPool<ToolsContext>(
+                options => options.UseLoggerFactory(loggerFactory).UseMySql(Configuration.GetConnectionString("ToolsConnection"),
                     mySqlOptions =>
                     {
                         mySqlOptions.ServerVersion(new Version(10, 3), ServerType.MariaDb);

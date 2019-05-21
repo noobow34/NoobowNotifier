@@ -7,6 +7,7 @@ using jafleet.Commons.EF;
 using Line.Messaging;
 using System.Collections.Generic;
 using NoobowNotifier.Constants;
+using Noobow.Commons.EF;
 
 namespace NoobowNotifier.Controllers
 {
@@ -15,9 +16,11 @@ namespace NoobowNotifier.Controllers
     public class LineBotController : Controller
     {
         private readonly jafleetContext _context;
-        public LineBotController(jafleetContext context)
+        private readonly ToolsContext _tContext;
+        public LineBotController(jafleetContext context, ToolsContext toolsContext)
         {
             _context = context;
+            _tContext = toolsContext;
         }
 
         /// <summary>
@@ -29,7 +32,7 @@ namespace NoobowNotifier.Controllers
         { 
             var events = WebhookEventParser.Parse(req.ToString());
 
-            var app = new LineBotApp(LineMessagingClientManager.GetInstance(),_context);
+            var app = new LineBotApp(LineMessagingClientManager.GetInstance(),_context,_tContext);
             await app.RunAsync(events);
             return new OkResult();
         }

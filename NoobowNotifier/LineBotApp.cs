@@ -1,6 +1,9 @@
 using jafleet.Commons.EF;
 using Line.Messaging;
 using Line.Messaging.Webhooks;
+using Noobow.Commons.Constants;
+using Noobow.Commons.EF;
+using Noobow.Commons.EF.Tools;
 using NoobowNotifier.Constants;
 using NoobowNotifier.Logics;
 using System;
@@ -13,11 +16,13 @@ namespace NoobowNotifier
     {
         private LineMessagingClient messagingClient { get; }
         private readonly jafleetContext _context;
+        private readonly ToolsContext _tContext;
 
-        public LineBotApp(LineMessagingClient lineMessagingClient, jafleetContext context)
+        public LineBotApp(LineMessagingClient lineMessagingClient, jafleetContext context,ToolsContext toolsContext)
         {
             this.messagingClient = lineMessagingClient;
             _context = context;
+            _tContext = toolsContext;
         }
 
         protected override async Task OnMessageAsync(MessageEvent ev)
@@ -78,6 +83,11 @@ namespace NoobowNotifier
 
             if (doPush)
             {
+                //task登録
+                var nTask = new NotificationTask { NotificationDetail = message[2], NotificationTime = pushTime, Status = NotificationTaskStatusEnum.INITIAL };
+                _tContext.NotificationTasks.Add(nTask);
+                _tContext.SaveChanges();
+
                 int sleepTime = (int)(pushTime - DateTime.Now).TotalMilliseconds;
                 await Task.Delay(sleepTime);
                 var quickReply = new QuickReply();
