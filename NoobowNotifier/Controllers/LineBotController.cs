@@ -8,6 +8,7 @@ using Line.Messaging;
 using System.Collections.Generic;
 using NoobowNotifier.Constants;
 using Noobow.Commons.EF;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace NoobowNotifier.Controllers
 {
@@ -17,10 +18,12 @@ namespace NoobowNotifier.Controllers
     {
         private readonly jafleetContext _context;
         private readonly ToolsContext _tContext;
-        public LineBotController(jafleetContext context, ToolsContext toolsContext)
+        private readonly IServiceScopeFactory _services;
+        public LineBotController(jafleetContext context, ToolsContext toolsContext, IServiceScopeFactory serviceScopeFactory)
         {
             _context = context;
             _tContext = toolsContext;
+            _services = serviceScopeFactory;
         }
 
         /// <summary>
@@ -32,7 +35,7 @@ namespace NoobowNotifier.Controllers
         { 
             var events = WebhookEventParser.Parse(req.ToString());
 
-            var app = new LineBotApp(LineMessagingClientManager.GetInstance(),_context,_tContext);
+            var app = new LineBotApp(LineMessagingClientManager.GetInstance(),_context,_tContext,_services);
             await app.RunAsync(events);
             return new OkResult();
         }

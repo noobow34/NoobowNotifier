@@ -1,6 +1,7 @@
 using jafleet.Commons.EF;
 using Line.Messaging;
 using Line.Messaging.Webhooks;
+using Microsoft.Extensions.DependencyInjection;
 using Noobow.Commons.Constants;
 using Noobow.Commons.EF;
 using Noobow.Commons.EF.Tools;
@@ -17,12 +18,14 @@ namespace NoobowNotifier
         private LineMessagingClient messagingClient { get; }
         private readonly jafleetContext _context;
         private readonly ToolsContext _tContext;
+        private readonly IServiceScopeFactory _services;
 
-        public LineBotApp(LineMessagingClient lineMessagingClient, jafleetContext context,ToolsContext toolsContext)
+        public LineBotApp(LineMessagingClient lineMessagingClient, jafleetContext context,ToolsContext toolsContext, IServiceScopeFactory serviceScopeFactory)
         {
             this.messagingClient = lineMessagingClient;
             _context = context;
             _tContext = toolsContext;
+            _services = serviceScopeFactory;
         }
 
         protected override async Task OnMessageAsync(MessageEvent ev)
@@ -87,15 +90,20 @@ namespace NoobowNotifier
                 var nTask = new NotificationTask { NotificationDetail = message[2], NotificationTime = pushTime, Status = NotificationTaskStatusEnum.INITIAL };
                 _tContext.NotificationTasks.Add(nTask);
                 _tContext.SaveChanges();
-
-                int sleepTime = (int)(pushTime - DateTime.Now).TotalMilliseconds;
-                await Task.Delay(sleepTime);
-                var quickReply = new QuickReply();
-                quickReply.Items.Add(new QuickReplyButtonObject(new MessageTemplateAction("5分後", $"{CommandConstant.PLAN_NOTICE} a5 {message[2]}")));
-                quickReply.Items.Add(new QuickReplyButtonObject(new MessageTemplateAction("10分後", $"{CommandConstant.PLAN_NOTICE} a10 {message[2]}")));
-                quickReply.Items.Add(new QuickReplyButtonObject(new MessageTemplateAction("30分後", $"{CommandConstant.PLAN_NOTICE} a30 {message[2]}")));
-                quickReply.Items.Add(new QuickReplyButtonObject(new MessageTemplateAction("1時間後", $"{CommandConstant.PLAN_NOTICE} a60 {message[2]}")));
-                await messagingClient.PushMessageAsync(userId,new List<ISendMessage>{ new TextMessage(message[2],quickReply) });
+                
+                if((pushTime - DateTime.Now).Hours < 1)
+                {
+                    //1時間以内なら即座にタスクを実行
+                    //1時間以上ならタイマーに任せる
+                    _ = Task.Run(() =>
+                    {
+                        using (var serviceScope = _services.CreateScope())
+                        {
+                            var executer = new TaskExecuter(nTask.TaskId);
+                            _ = executer.ExecuteAsync();
+                        }
+                    });
+                }
             }
         }
     }
