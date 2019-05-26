@@ -22,7 +22,6 @@ namespace NoobowNotifier
         private static IServiceProvider _provider;
         private static ToolsContext _context;
         private static System.Timers.Timer _timer;
-        private const int _interval = 3600000;
         public static void Main(string[] args)
         {
             _services = new ServiceCollection();
@@ -32,10 +31,16 @@ namespace NoobowNotifier
             );
             var loggerFactory = _services.BuildServiceProvider().GetService<ILoggerFactory>();
             var config = new ConfigurationBuilder().SetBasePath(System.AppDomain.CurrentDomain.BaseDirectory).AddJsonFile("appsettings.json").Build();
-            var connectionString = config.GetConnectionString("ToolsConnection");
-
+            AppConfig.ToolsConnectionString = config.GetConnectionString("ToolsConnection");
+            AppConfig.ToolsOption = new DbContextOptionsBuilder<ToolsContext>();
+            AppConfig.ToolsOption.UseLoggerFactory(loggerFactory).UseMySql(AppConfig.ToolsConnectionString,
+                    mySqlOptions =>
+                    {
+                        mySqlOptions.ServerVersion(new Version(10, 3), ServerType.MariaDb);
+                    }
+            );
             _services.AddDbContext<ToolsContext>(
-                options => options.UseLoggerFactory(loggerFactory).UseMySql(connectionString,
+                options => options.UseLoggerFactory(loggerFactory).UseMySql(AppConfig.ToolsConnectionString,
                     mySqlOptions =>
                     {
                         mySqlOptions.ServerVersion(new Version(10, 3), ServerType.MariaDb);
@@ -46,7 +51,7 @@ namespace NoobowNotifier
             _context = _provider.GetService<ToolsContext>();
 
             //実行中になっているタスクを再スタート
-            DateTime nextEvent = DateTime.Now.AddMilliseconds(Convert.ToInt64(_interval));
+            DateTime nextEvent = DateTime.Now.AddMilliseconds(Convert.ToInt64(AppConfig.TimerInterval));
             var tasks = _context.NotificationTasks.AsNoTracking().Where(t => t.NotificationTime >= DateTime.Now && t.NotificationTime <= nextEvent && (t.Status == NotificationTaskStatusEnum.INITIAL || t.Status == NotificationTaskStatusEnum.EXECUTING)).ToList();
             foreach (var t in tasks)
             {
@@ -59,7 +64,7 @@ namespace NoobowNotifier
             }
 
             //タイマースタート
-            _timer = new System.Timers.Timer(_interval);
+            _timer = new System.Timers.Timer(AppConfig.TimerInterval);
             _timer.Elapsed += new ElapsedEventHandler(ReadAndExecuteTask);
             _timer.Start();
 
@@ -68,7 +73,7 @@ namespace NoobowNotifier
 
         private static void ReadAndExecuteTask(object sender, EventArgs e)
         {
-            DateTime nextEvent = DateTime.Now.AddMilliseconds(Convert.ToInt64(_interval));
+            DateTime nextEvent = DateTime.Now.AddMilliseconds(Convert.ToInt64(AppConfig.TimerInterval));
             var tasks = _context.NotificationTasks.AsNoTracking().Where(t => t.NotificationTime >= DateTime.Now && t.NotificationTime <= nextEvent && t.Status == NotificationTaskStatusEnum.INITIAL).ToList();
             foreach (var t in tasks)
             {

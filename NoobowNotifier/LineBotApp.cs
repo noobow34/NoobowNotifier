@@ -1,6 +1,8 @@
+using EnumStringValues;
 using jafleet.Commons.EF;
 using Line.Messaging;
 using Line.Messaging.Webhooks;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Noobow.Commons.Constants;
 using Noobow.Commons.EF;
@@ -9,6 +11,8 @@ using NoobowNotifier.Constants;
 using NoobowNotifier.Logics;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace NoobowNotifier
@@ -45,12 +49,12 @@ namespace NoobowNotifier
             bool doPush = false;
             ISendMessage replyMessage = null;
 
-            switch (message[0])
+            switch (message[0].ParseToEnum<CommandEum>())
             {
-                case CommandConstant.JAFLEET_GA:
+                case CommandEum.JAfleetGa:
                     replyMessage = new TextMessage(GALogics.GetReportStringMyNormal1(_context));
                     break;
-                case CommandConstant.PLAN_NOTICE:
+                case CommandEum.PlanNotice:
                     string additional = string.Empty;
                     if (message[1].StartsWith("a"))
                     {
@@ -78,6 +82,15 @@ namespace NoobowNotifier
                     }
                     replyMessage = new TextMessage(mes);
                     break;
+                case CommandEum.PlanList:
+                    var tasks = _tContext.NotificationTasks.AsNoTracking().Where(t => t.NotificationTime >= DateTime.Now).ToList();
+                    var planList = new StringBuilder();
+                    foreach (var t in tasks)
+                    {
+                        planList.Append($"{t.NotificationTime?.ToString("yyyy/MM/dd HH:mm")}:{t.NotificationDetail}:{t.Status.GetStringValue()}\n");
+                    }
+                    replyMessage = new TextMessage(planList.ToString());
+                    break;
                 default:
                     break;
             }
@@ -91,7 +104,7 @@ namespace NoobowNotifier
                 _tContext.NotificationTasks.Add(nTask);
                 _tContext.SaveChanges();
                 
-                if((pushTime - DateTime.Now).Hours < 1)
+                if((pushTime - DateTime.Now).TotalMilliseconds < AppConfig.TimerInterval)
                 {
                     //1時間以内なら即座にタスクを実行
                     //1時間以上ならタイマーに任せる
