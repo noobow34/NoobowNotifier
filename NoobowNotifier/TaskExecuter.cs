@@ -42,7 +42,7 @@ namespace NoobowNotifier
                 quickReply.Items.Add(new QuickReplyButtonObject(new MessageTemplateAction("10分後", $"{CommandEum.PlanNotice.GetStringValue()} a10 {task.NotificationDetail}")));
                 quickReply.Items.Add(new QuickReplyButtonObject(new MessageTemplateAction("30分後", $"{CommandEum.PlanNotice.GetStringValue()} a30 {task.NotificationDetail}")));
                 quickReply.Items.Add(new QuickReplyButtonObject(new MessageTemplateAction("1時間後", $"{CommandEum.PlanNotice.GetStringValue()} a60 {task.NotificationDetail}")));
-                await LineMessagingClientManager.GetInstance().PushMessageAsync(LineUserIdConstant.NOOBWO, new List<ISendMessage> { new TextMessage(task.NotificationDetail, quickReply) });
+                await LineMessagingClientManager.GetInstance().PushMessageAsync(task.NotificationTo, new List<ISendMessage> { new TextMessage(task.NotificationDetail, quickReply) });
                 //実行済みに更新
                 task.Status = NotificationTaskStatusEnum.EXECUTED;
                 context.SaveChanges();

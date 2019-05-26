@@ -100,7 +100,7 @@ namespace NoobowNotifier
             if (doPush)
             {
                 //task登録
-                var nTask = new NotificationTask { NotificationDetail = message[2], NotificationTime = pushTime, Status = NotificationTaskStatusEnum.INITIAL };
+                var nTask = new NotificationTask { NotificationDetail = message[2], NotificationTime = pushTime, Status = NotificationTaskStatusEnum.INITIAL, NotificationTo = userId };
                 _tContext.NotificationTasks.Add(nTask);
                 _tContext.SaveChanges();
                 
