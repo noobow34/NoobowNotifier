@@ -87,7 +87,7 @@ namespace NoobowNotifier
                     var planList = new StringBuilder();
                     foreach (var t in tasks)
                     {
-                        planList.Append($"{t.NotificationTime?.ToString("yyyy/MM/dd HH:mm")}:{t.NotificationDetail}:{t.Status.GetStringValue()}\n");
+                        planList.AppendLine($"{t.NotificationTime?.ToString("yyyy/MM/dd HH:mm")}:{t.NotificationDetail} {t.Status.GetStringValue()}\n");
                     }
                     replyMessage = new TextMessage(planList.ToString());
                     break;
