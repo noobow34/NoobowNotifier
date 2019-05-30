@@ -72,6 +72,10 @@ namespace NoobowNotifier
                     }
 
                     doPush = DateTime.TryParseExact(additional + message[1], "yyyyMMddHHmm", null, System.Globalization.DateTimeStyles.None, out pushTime);
+                    if(pushTime <= DateTime.Now)
+                    {
+                        doPush = false;
+                    }
                     string mes;
                     if (doPush) {
                         mes = "予約しました";
@@ -83,7 +87,7 @@ namespace NoobowNotifier
                     replyMessage = new TextMessage(mes);
                     break;
                 case CommandEum.PlanList:
-                    var tasks = _tContext.NotificationTasks.AsNoTracking().Where(t => t.NotificationTime >= DateTime.Now).ToList();
+                    var tasks = _tContext.NotificationTasks.AsNoTracking().Where(t => t.NotificationTime >= DateTime.Now && t.NotificationTo == userId).ToList();
                     var planList = new StringBuilder();
                     foreach (var t in tasks)
                     {
