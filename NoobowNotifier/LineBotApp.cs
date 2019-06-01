@@ -89,9 +89,18 @@ namespace NoobowNotifier
                 case CommandEum.PlanList:
                     var tasks = _tContext.NotificationTasks.AsNoTracking().Where(t => t.NotificationTime >= DateTime.Now && t.NotificationTo == userId).ToList();
                     var planList = new StringBuilder();
+                    bool firstLine = true;
                     foreach (var t in tasks)
                     {
-                        planList.AppendLine($"{t.NotificationTime?.ToString("yyyy/MM/dd HH:mm")}:{t.NotificationDetail} {t.Status.GetStringValue()}");
+                        if (!firstLine)
+                        {
+                            planList.AppendLine();
+                        }
+                        else
+                        {
+                            firstLine = false;
+                        }
+                        planList.Append($"{t.NotificationTime?.ToString("yyyy/MM/dd HH:mm")}:{t.NotificationDetail} {t.Status.GetStringValue()}");
                     }
                     replyMessage = new TextMessage(planList.ToString());
                     break;
