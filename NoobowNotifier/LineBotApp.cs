@@ -87,7 +87,7 @@ namespace NoobowNotifier
                     replyMessage = new TextMessage(mes);
                     break;
                 case CommandEum.PlanList:
-                    var tasks = _tContext.NotificationTasks.AsNoTracking().Where(t => t.NotificationTime >= DateTime.Now && t.NotificationTo == userId).ToList();
+                    var tasks = _tContext.NotificationTasks.AsNoTracking().Where(t => t.NotificationTime >= DateTime.Now && t.NotificationTo == userId).OrderBy(t => t.NotificationTime).ToList();
                     var planList = new StringBuilder();
                     bool firstLine = true;
                     foreach (var t in tasks)
