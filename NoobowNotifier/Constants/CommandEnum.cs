@@ -14,6 +14,8 @@ namespace NoobowNotifier.Constants
         JAfleetGa,
         [StringValue("よ")]
         PlanNotice,
+        [StringValue("え"),StringValue("e")]
+        Edit,
         [StringValue("より")]
         PlanList
     }

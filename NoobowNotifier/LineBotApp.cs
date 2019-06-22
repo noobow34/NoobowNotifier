@@ -13,6 +13,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace NoobowNotifier
@@ -103,6 +104,12 @@ namespace NoobowNotifier
                         planList.Append($"{t.NotificationTime?.ToString("yyyy/MM/dd HH:mm")}:{t.NotificationDetail} {t.Status.GetStringValue()}");
                     }
                     replyMessage = new TextMessage(planList.ToString());
+                    break;
+                case CommandEum.Edit:
+                    if (Regex.IsMatch(message[1], "[0-9]{4}") || Regex.IsMatch(message[1], "[0-9]{3}[a-zA-Z]{1}") || Regex.IsMatch(message[1], "[0-9]{2}[a-zA-Z]{2}"))
+                    {
+                        replyMessage = new TextMessage($"googlechromes://ja-fleet.noobow.me/e/JA{message[1].ToUpper()}");
+                    }
                     break;
                 default:
                     break;
