@@ -8,8 +8,7 @@ namespace NoobowNotifier.Constants
 {
     public enum CommandEum
     {
-        /*public const string JAFLEET_GA = "あ";
-        public const string PLAN_NOTICE = "よ"*/
+        Other,
         [StringValue("あ")]
         JAfleetGa,
         [StringValue("よ")]

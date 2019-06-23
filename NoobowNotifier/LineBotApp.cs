@@ -105,13 +105,11 @@ namespace NoobowNotifier
                     }
                     replyMessage = new TextMessage(planList.ToString());
                     break;
-                case CommandEum.Edit:
+                default:
                     if (Regex.IsMatch(message[1], "[0-9]{4}") || Regex.IsMatch(message[1], "[0-9]{3}[a-zA-Z]{1}") || Regex.IsMatch(message[1], "[0-9]{2}[a-zA-Z]{2}"))
                     {
                         replyMessage = new TextMessage($"googlechromes://ja-fleet.noobow.me/e/JA{message[1].ToUpper()}");
                     }
-                    break;
-                default:
                     break;
             }
 
