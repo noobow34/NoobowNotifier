@@ -8,7 +8,6 @@ namespace NoobowNotifier.Constants
 {
     public enum CommandEum
     {
-        Other,
         [StringValue("あ")]
         JAfleetGa,
         [StringValue("よ")]
