@@ -1,4 +1,5 @@
 using EnumStringValues;
+using jafleet.Commons.Constants;
 using jafleet.Commons.EF;
 using Line.Messaging;
 using Line.Messaging.Webhooks;
@@ -107,6 +108,11 @@ namespace NoobowNotifier
                         planList.Append($"{t.NotificationTime?.ToString("yyyy/MM/dd HH:mm")}:{t.NotificationDetail} {t.Status.GetStringValue()}");
                     }
                     replyMessage = new TextMessage(planList.ToString());
+                    break;
+                case CommandEum.ExceptionDelete:
+                    _context.Log.RemoveRange(_context.Log.Where(l => l.LogType == LogType.EXCEPTION));
+                    int result = _context.SaveChanges();
+                    replyMessage = new TextMessage($"{result}件削除しました");
                     break;
                 default:
                     if (Regex.IsMatch(message[0], "[0-9]{4}") || Regex.IsMatch(message[0], "[0-9]{3}[a-zA-Z]{1}") || Regex.IsMatch(message[0], "[0-9]{2}[a-zA-Z]{2}"))

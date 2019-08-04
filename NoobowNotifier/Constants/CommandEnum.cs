@@ -14,6 +14,8 @@ namespace NoobowNotifier.Constants
         [StringValue("よ")]
         PlanNotice,
         [StringValue("より")]
-        PlanList
+        PlanList,
+        [StringValue("えさ")]
+        ExceptionDelete
     }
 }
