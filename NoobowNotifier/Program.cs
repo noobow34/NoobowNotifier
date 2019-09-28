@@ -30,7 +30,7 @@ namespace NoobowNotifier
                 .AddFilter(level => level >= LogLevel.Information)
             );
             var loggerFactory = _services.BuildServiceProvider().GetService<ILoggerFactory>();
-            var config = new ConfigurationBuilder().SetBasePath(System.AppDomain.CurrentDomain.BaseDirectory).AddJsonFile("appsettings.json").Build();
+            var config = new ConfigurationBuilder().SetBasePath(Environment.CurrentDirectory).AddJsonFile("appsettings.json").Build();
             AppConfig.ToolsConnectionString = config.GetConnectionString("ToolsConnection");
             AppConfig.ToolsOption = new DbContextOptionsBuilder<ToolsContext>();
             AppConfig.ToolsOption.UseLoggerFactory(loggerFactory).UseMySql(AppConfig.ToolsConnectionString,
