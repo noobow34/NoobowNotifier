@@ -79,6 +79,12 @@
             refresh(1);
         });
 
+        $("#cDate").change(function () {
+            currentDate = dayjs($("#cDate").val());
+            detailTable.ajax.url('/Follows/Detail?date=' + getCurrentDate(0)).load();
+            summaryTable.ajax.url('/Follows/Summary?fromdate=' + getCurrentDate(0) + '&todate=' + getCurrentDate(-5)).load();
+        });
+
         const getCurrentDate = function (moveDays) {
             return currentDate.add(moveDays, 'day').format("YYYYMMDD");
         }
