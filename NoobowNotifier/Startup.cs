@@ -11,6 +11,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
 using Noobow.Commons.EF;
+using Noobow.Commons.EF.Twitter;
 
 namespace NoobowNotifier
 {
@@ -46,6 +47,14 @@ namespace NoobowNotifier
                         mySqlOptions.ServerVersion(new Version(10, 3), ServerType.MariaDb);
                     }
             ));
+            services.AddDbContext<TwitterContext>(
+                options => options.UseLoggerFactory(loggerFactory).UseMySql(Configuration.GetConnectionString("TwitterConnection"),
+                    mySqlOptions =>
+                    {
+                        mySqlOptions.ServerVersion(new Version(10, 3), ServerType.MariaDb);
+                    }
+            ));
+
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2); ;
             services.Configure<AppSettings>(Configuration);
         }
