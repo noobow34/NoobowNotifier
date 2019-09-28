@@ -12,6 +12,7 @@ using System;
 using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
 using Noobow.Commons.EF;
 using Noobow.Commons.EF.Twitter;
+using Microsoft.Extensions.Hosting;
 
 namespace NoobowNotifier
 {
@@ -26,12 +27,7 @@ namespace NoobowNotifier
 
         public void ConfigureServices(IServiceCollection services)
         {
-            IServiceCollection serviceCollection = new ServiceCollection();
-            serviceCollection.AddLogging(builder => builder
-            .AddConsole()
-            .AddFilter(level => level >= LogLevel.Information)
-            );
-            var loggerFactory = serviceCollection.BuildServiceProvider().GetService<ILoggerFactory>();
+            var loggerFactory = LoggerFactory.Create(builder => builder.AddConsole());
 
             services.AddDbContextPool<jafleetContext>(
                 options => options.UseLoggerFactory(loggerFactory).UseMySql(Configuration.GetConnectionString("DefaultConnection"),
@@ -55,22 +51,21 @@ namespace NoobowNotifier
                     }
             ));
 
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2); ;
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
             services.Configure<AppSettings>(Configuration);
         }
 
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
             app.UseLineValidationMiddleware(Configuration.GetSection("LineSettings")["ChannelSecret"]);
-            app.UseMvc(routes =>
+            app.UseRouting();
+            app.UseEndpoints(endpoints =>
             {
-                routes.MapRoute(
-                       name: "default",
-                       template: "{controller=Home}/{action=Index}");
+                endpoints.MapControllerRoute("default","{controller=Home}/{action=Index}");
             });
         }        
     }
