@@ -32,7 +32,7 @@
         var currentDate;
         var detailTable;
         var summaryTable;
-        $(function () {
+        $(() => {
             currentDate = dayjs();
             $("#cDate").val(currentDate.format("YYYY-MM-DD"));
             summaryTable = $('#followSummary').DataTable({
@@ -71,25 +71,19 @@
             });
         });
 
-        $("#prev").click(function () {
-            refresh(-1);
-        });
+        $("#prev").click(() => refresh(-1));
 
-        $("#next").click(function () {
-            refresh(1);
-        });
+        $("#next").click(() => refresh(1));
 
-        $("#cDate").change(function () {
+        $("#cDate").change(() => {
             currentDate = dayjs($("#cDate").val());
             detailTable.ajax.url('/Follows/Detail?date=' + getCurrentDate(0)).load();
             summaryTable.ajax.url('/Follows/Summary?fromdate=' + getCurrentDate(0) + '&todate=' + getCurrentDate(-5)).load();
         });
 
-        const getCurrentDate = function (moveDays) {
-            return currentDate.add(moveDays, 'day').format("YYYYMMDD");
-        }
+        const getCurrentDate = (moveDays) => currentDate.add(moveDays, 'day').format("YYYYMMDD");
 
-        const refresh = function (moveDays) {
+        const refresh = (moveDays) => {
             currentDate = currentDate.add(moveDays, 'day');
             $("#cDate").val(currentDate.format("YYYY-MM-DD"));
             detailTable.ajax.url('/Follows/Detail?date=' + getCurrentDate(0)).load();
