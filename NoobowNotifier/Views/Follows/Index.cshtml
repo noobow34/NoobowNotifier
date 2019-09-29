@@ -33,7 +33,7 @@
         var detailTable;
         var summaryTable;
         $(function () {
-            currentDate = dayjs().add(-1, 'day');
+            currentDate = dayjs();
             $("#cDate").val(currentDate.format("YYYY-MM-DD"));
             summaryTable = $('#followSummary').DataTable({
                 ajax: { url:'/Follows/Summary?fromdate=' + getCurrentDate(0) + '&todate=' + getCurrentDate(-5), dataSrc: '' },
