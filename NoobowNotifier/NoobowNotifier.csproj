@@ -12,6 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="CoreTweet" Version="1.0.0.483" />
     <PackageReference Include="EnumStringValues" Version="4.0.0" />
     <PackageReference Include="Google.Apis.AnalyticsReporting.v4" Version="1.41.1.1723" />
     <PackageReference Include="Line.Messaging" Version="1.4.5" />
