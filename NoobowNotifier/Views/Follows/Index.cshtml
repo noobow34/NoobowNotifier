@@ -23,6 +23,7 @@
             <th>イベント</th>
             <th>ID</th>
             <th>名前</th>
+            <th>何回目</th>
         </tr>
     </thead>
 </table>
@@ -58,11 +59,12 @@
                 ajax: { url:'/Follows/Detail?date=' + getCurrentDate(0), dataSrc: '' },
                 columns: [
                     { data: 'owner' }
-                    , { data: 'eventDateString' }
+                    , { data: 'eventDate' }
                     , { data: 'followsType' }
                     , { data: 'eventType' }
                     , { data: 'screenName' }
-                    , {data: 'name'}                    
+                    , { data: 'name' }            
+                    , { data: 'sameHistoryCount'}            
                 ],
                 paging: false,
                 fixedHeader: true,
