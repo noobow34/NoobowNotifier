@@ -62,7 +62,9 @@
                     , { data: 'eventDateDisp' }
                     , { data: 'followsType' }
                     , { data: 'eventType' }
-                    , { data: 'screenName' }
+                    , { data: 'screenName', render: function(data, type, row, meta)  {
+                        return "<a href=\"javascript:window.open('https://twitter.com/" + data + "/','_blank')\">" + data + "</a>";
+                        } }
                     , { data: 'name' }            
                     , { data: 'sameHistoryCount'}            
                 ],
