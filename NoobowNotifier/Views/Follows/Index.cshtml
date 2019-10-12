@@ -39,7 +39,7 @@
             summaryTable = $('#followSummary').DataTable({
                 ajax: { url:'/Follows/Summary?fromdate=' + getCurrentDate(0) + '&todate=' + getCurrentDate(-5), dataSrc: '' },
                 columns: [
-                    { data: 'date' }
+                    { data: 'dateDisp' }
                     , { data:'noobowFollowerDo'}
                     , { data:'noobowFollowerUn'}
                     , { data:'noobowFollowingrDo'}
@@ -59,7 +59,7 @@
                 ajax: { url:'/Follows/Detail?date=' + getCurrentDate(0), dataSrc: '' },
                 columns: [
                     { data: 'owner' }
-                    , { data: 'eventDate' }
+                    , { data: 'eventDateDisp' }
                     , { data: 'followsType' }
                     , { data: 'eventType' }
                     , { data: 'screenName' }
