@@ -12,10 +12,9 @@ namespace NoobowNotifier.Controllers
 
             ProcessStartInfo psInfo = new ProcessStartInfo();
 
-            psInfo.FileName = command;
-            psInfo.CreateNoWindow = true;
+            psInfo.FileName = "/bin/sh";
+            psInfo.Arguments = command;
             psInfo.UseShellExecute = false;
-
             psInfo.RedirectStandardOutput = true;
 
             Process p = Process.Start(psInfo);
