@@ -33,26 +33,25 @@ namespace NoobowNotifier
                 options => options.UseLoggerFactory(loggerFactory).UseMySql(Configuration.GetConnectionString("DefaultConnection"),
                     mySqlOptions =>
                     {
-                        mySqlOptions.ServerVersion(new Version(10, 3), ServerType.MariaDb);
+                        mySqlOptions.ServerVersion(new Version(10, 4), ServerType.MariaDb);
                     }
             ));
             services.AddDbContextPool<ToolsContext>(
                 options => options.UseLoggerFactory(loggerFactory).UseMySql(Configuration.GetConnectionString("ToolsConnection"),
                     mySqlOptions =>
                     {
-                        mySqlOptions.ServerVersion(new Version(10, 3), ServerType.MariaDb);
+                        mySqlOptions.ServerVersion(new Version(10, 4), ServerType.MariaDb);
                     }
             ));
             services.AddDbContext<TwitterContext>(
                 options => options.UseLoggerFactory(loggerFactory).UseMySql(Configuration.GetConnectionString("TwitterConnection"),
                     mySqlOptions =>
                     {
-                        mySqlOptions.ServerVersion(new Version(10, 3), ServerType.MariaDb);
+                        mySqlOptions.ServerVersion(new Version(10, 4), ServerType.MariaDb);
                     }
             ));
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
-            services.AddMvc().AddNewtonsoftJson();
             services.Configure<AppSettings>(Configuration);
         }
 
