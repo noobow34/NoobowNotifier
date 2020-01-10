@@ -77,6 +77,8 @@ namespace NoobowNotifier
             _twitterSettings = config.GetSection("TwitterSettings");
             _tokens = Tokens.Create(_twitterSettings["APIKey"], _twitterSettings["APISecret"], _twitterSettings["AccessKey"], _twitterSettings["AccessSecret"]);
 
+            AppConfig.NFToken = config.GetSection("NF")?["Token"];
+
             //実行中になっているタスクを再スタート
             DateTime nextEvent = DateTime.Now.AddMilliseconds(Convert.ToInt64(AppConfig.TimerInterval));
             var tasks = _context.NotificationTasks.AsNoTracking().Where(t => t.NotificationTime >= DateTime.Now && t.NotificationTime <= nextEvent && (t.Status == NotificationTaskStatusEnum.INITIAL || t.Status == NotificationTaskStatusEnum.EXECUTING)).ToList();

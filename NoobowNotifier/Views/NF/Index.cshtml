@@ -1,0 +1,31 @@
+﻿<div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-body">
+            <div class="form-group">
+                <label class="control-label" for="message">メッセージ</label><br /><textarea id="message" style="width:90%"></textarea><br />
+            </div>
+            <button type="button" id="sendButton" class="btn btn-primary">送信</button>
+            <label class="text-primary" id="result"></label>
+        </div>
+    </div>
+</div>
+@section ScriptsPartial{
+    <script>
+    $('#sendButton').on('click', function () {
+        $.ajax({
+            type: 'POST',
+            url: '/NF/Send',
+            data: { message: $('#message').val() },
+            cache: false
+        }).fail(function (data) {
+            $('#result').text("送信しました");
+        }).done(function (data) {
+            if (data == "OK") {
+                $('#result').text("送信しました");
+            } else {
+                $('#result').text("送信に失敗しました");
+            }
+        });
+    });
+    </script>
+}
