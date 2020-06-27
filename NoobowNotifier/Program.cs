@@ -32,22 +32,22 @@ namespace NoobowNotifier
         public static void Main(string[] args)
         {
             _services = new ServiceCollection();
-            _services.AddLogging(builder => builder
+            /*_services.AddLogging(builder => builder
                 .AddConsole()
                 .AddFilter(level => level >= LogLevel.Information)
-            );
-            var loggerFactory = _services.BuildServiceProvider().GetService<ILoggerFactory>();
+            );*/
+            //var loggerFactory = _services.BuildServiceProvider().GetService<ILoggerFactory>();
             var config = new ConfigurationBuilder().SetBasePath(Environment.CurrentDirectory).AddJsonFile("appsettings.json").Build();
             AppConfig.ToolsConnectionString = config.GetConnectionString("ToolsConnection");
             AppConfig.ToolsOption = new DbContextOptionsBuilder<ToolsContext>();
-            AppConfig.ToolsOption.UseLoggerFactory(loggerFactory).UseMySql(AppConfig.ToolsConnectionString,
+            AppConfig.ToolsOption/*.UseLoggerFactory(loggerFactory)*/.UseMySql(AppConfig.ToolsConnectionString,
                     mySqlOptions =>
                     {
                         mySqlOptions.ServerVersion(new Version(10, 3), ServerType.MariaDb);
                     }
             );
             _services.AddDbContext<ToolsContext>(
-                options => options.UseLoggerFactory(loggerFactory).UseMySql(AppConfig.ToolsConnectionString,
+                options => options/*.UseLoggerFactory(loggerFactory)*/.UseMySql(AppConfig.ToolsConnectionString,
                     mySqlOptions =>
                     {
                         mySqlOptions.ServerVersion(new Version(10, 3), ServerType.MariaDb);
@@ -56,14 +56,14 @@ namespace NoobowNotifier
 
             AppConfig.TwitterConnectionString = config.GetConnectionString("TwitterConnection");
             AppConfig.TwitterOption = new DbContextOptionsBuilder<TwitterContext>();
-            AppConfig.TwitterOption.UseLoggerFactory(loggerFactory).UseMySql(AppConfig.ToolsConnectionString,
+            AppConfig.TwitterOption/*.UseLoggerFactory(loggerFactory)*/.UseMySql(AppConfig.ToolsConnectionString,
                     mySqlOptions =>
                     {
                         mySqlOptions.ServerVersion(new Version(10, 3), ServerType.MariaDb);
                     }
             );
             _services.AddDbContext<TwitterContext>(
-                options => options.UseLoggerFactory(loggerFactory).UseMySql(AppConfig.TwitterConnectionString,
+                options => options/*.UseLoggerFactory(loggerFactory)*/.UseMySql(AppConfig.TwitterConnectionString,
                     mySqlOptions =>
                     {
                         mySqlOptions.ServerVersion(new Version(10, 3), ServerType.MariaDb);
