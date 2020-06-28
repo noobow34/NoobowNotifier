@@ -30,21 +30,21 @@ namespace NoobowNotifier
             var loggerFactory = LoggerFactory.Create(builder => builder.AddConsole());
 
             services.AddDbContextPool<jafleetContext>(
-                options => options.UseLoggerFactory(loggerFactory).UseMySql(Configuration.GetConnectionString("DefaultConnection"),
+                options => options/*.UseLoggerFactory(loggerFactory)*/.UseMySql(Configuration.GetConnectionString("DefaultConnection"),
                     mySqlOptions =>
                     {
                         mySqlOptions.ServerVersion(new Version(10, 4), ServerType.MariaDb);
                     }
             ));
             services.AddDbContextPool<ToolsContext>(
-                options => options.UseLoggerFactory(loggerFactory).UseMySql(Configuration.GetConnectionString("ToolsConnection"),
+                options => options/*.UseLoggerFactory(loggerFactory)*/.UseMySql(Configuration.GetConnectionString("ToolsConnection"),
                     mySqlOptions =>
                     {
                         mySqlOptions.ServerVersion(new Version(10, 4), ServerType.MariaDb);
                     }
             ));
             services.AddDbContext<TwitterContext>(
-                options => options.UseLoggerFactory(loggerFactory).UseMySql(Configuration.GetConnectionString("TwitterConnection"),
+                options => options/*.UseLoggerFactory(loggerFactory)*/.UseMySql(Configuration.GetConnectionString("TwitterConnection"),
                     mySqlOptions =>
                     {
                         mySqlOptions.ServerVersion(new Version(10, 4), ServerType.MariaDb);
