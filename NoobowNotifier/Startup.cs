@@ -30,25 +30,13 @@ namespace NoobowNotifier
             var loggerFactory = LoggerFactory.Create(builder => builder.AddConsole());
 
             services.AddDbContextPool<jafleetContext>(
-                options => options/*.UseLoggerFactory(loggerFactory)*/.UseMySql(Configuration.GetConnectionString("DefaultConnection"),
-                    mySqlOptions =>
-                    {
-                        mySqlOptions.ServerVersion(new Version(10, 4), ServerType.MariaDb);
-                    }
+                options => options/*.UseLoggerFactory(loggerFactory)*/.UseMySql(Configuration.GetConnectionString("DefaultConnection"), new MariaDbServerVersion(new Version(10, 4))
             ));
             services.AddDbContextPool<ToolsContext>(
-                options => options/*.UseLoggerFactory(loggerFactory)*/.UseMySql(Configuration.GetConnectionString("ToolsConnection"),
-                    mySqlOptions =>
-                    {
-                        mySqlOptions.ServerVersion(new Version(10, 4), ServerType.MariaDb);
-                    }
+                options => options/*.UseLoggerFactory(loggerFactory)*/.UseMySql(Configuration.GetConnectionString("ToolsConnection"), new MariaDbServerVersion(new Version(10, 4))
             ));
             services.AddDbContext<TwitterContext>(
-                options => options/*.UseLoggerFactory(loggerFactory)*/.UseMySql(Configuration.GetConnectionString("TwitterConnection"),
-                    mySqlOptions =>
-                    {
-                        mySqlOptions.ServerVersion(new Version(10, 4), ServerType.MariaDb);
-                    }
+                options => options/*.UseLoggerFactory(loggerFactory)*/.UseMySql(Configuration.GetConnectionString("TwitterConnection"), new MariaDbServerVersion(new Version(10, 4))
             ));
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
