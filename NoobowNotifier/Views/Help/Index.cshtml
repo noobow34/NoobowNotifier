@@ -1,0 +1,18 @@
+﻿@section ScriptsPartial{
+<script>
+	$(() => {
+		navigator.geolocation.getCurrentPosition(sendLocation);
+	});
+
+	const sendLocation = (position) => {
+		$.ajax({
+			type: 'POST',
+			url: '/Help/Call',
+			data: { latitude: position.coords.latitude,longitude: position.coords.longitude },
+			cache: false
+		}).done(function (data) {
+
+		});
+	};
+</script>
+}
