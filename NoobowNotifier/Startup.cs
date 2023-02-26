@@ -39,7 +39,6 @@ namespace NoobowNotifier
                 options => options/*.UseLoggerFactory(loggerFactory)*/.UseMySql(Configuration.GetConnectionString("TwitterConnection"), new MariaDbServerVersion(new Version(10, 4))
             ));
 
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
             services.AddMvc().AddNewtonsoftJson();
             services.Configure<AppSettings>(Configuration);
         }
