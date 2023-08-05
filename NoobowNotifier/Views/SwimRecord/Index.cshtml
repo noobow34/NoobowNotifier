@@ -1,0 +1,48 @@
+﻿@section HeadPartial{
+    <link rel="icon" href="/swim.ico" />
+    <title>SwimRecord</title>
+}
+<fieldset>
+<legend>記録</legend>
+<input type="date" id="swimdate">　<button type="button" id="swimButton" class="btn btn-primary">泳いだよ！</button>
+<div id="recordResult" style="color:red"></div>
+</fieldset>
+<fieldset>
+<legend>参照</legend>
+    <input type="month" id="nankai">　
+    <button type="button" id="nankaiButton" class="btn btn-primary">何回泳いだかな？</button><br />
+    <div id="countResult" style="color:red"></div>
+</fieldset>
+@section ScriptsPartial{
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dayjs/1.8.16/dayjs.min.js" integrity="sha256-4ZAJq9kaOQU0baQImJ8cE4swV+cAOrx/NL11yOL+VvY=" crossorigin="anonymous"></script>
+    <script>
+        $(() => {
+            $("#swimdate").val(dayjs().format("YYYY-MM-DD"));
+            $("#nankai").val(dayjs().format("YYYY-MM"));
+        });
+
+        $("#swimButton").click(() => {
+            $("#recordResult").text("");
+            $.ajax({ url: '/SwimRecord/RecordSwim', type: "POST", data: { swimDate: $("#swimdate").val() } })
+            .done(function (data) {
+                if(data != -1){
+                        $("#recordResult").html("記録成功！<br>今月" + data + "回目だよ！" );
+                }else{
+                        $("#recordResult").html("記録失敗(;_;)");
+                }
+            }).fail(function (XMLHttpRequest, textStatus, errorThrown) {
+                    $("#recordResult").html("検索失敗(;_;)");
+            });
+        });
+
+        $("#nankaiButton").click(() => {
+            $("#countResult").text("");
+            $.ajax({ url: '/SwimRecord/CountSwim', type: "POST", data: { countTarget: $("#nankai").val() } })
+                .done(function (data) {
+                    $("#countResult").html(data);
+                }).fail(function (XMLHttpRequest, textStatus, errorThrown) {
+                    $("#countResult").html(data);
+                });
+        });
+    </script>
+}

@@ -35,9 +35,6 @@ namespace NoobowNotifier
             services.AddDbContextPool<ToolsContext>(
                 options => options/*.UseLoggerFactory(loggerFactory)*/.UseMySql(Configuration.GetConnectionString("ToolsConnection"), new MariaDbServerVersion(new Version(10, 4))
             ));
-            services.AddDbContext<TwitterContext>(
-                options => options/*.UseLoggerFactory(loggerFactory)*/.UseMySql(Configuration.GetConnectionString("TwitterConnection"), new MariaDbServerVersion(new Version(10, 4))
-            ));
 
             services.AddMvc().AddNewtonsoftJson();
             services.Configure<AppSettings>(Configuration);
@@ -50,6 +47,7 @@ namespace NoobowNotifier
                 app.UseDeveloperExceptionPage();
             }
             app.UseLineValidationMiddleware(Configuration.GetSection("LineSettings")["ChannelSecret"]);
+            app.UseStaticFiles();
             app.UseRouting();
             app.UseEndpoints(endpoints =>
             {
