@@ -35,8 +35,8 @@ namespace NoobowNotifier.Logics
             var splitYM = countTarget.Split("-");
             int year = int.Parse(splitYM[0]);
             int month = int.Parse(splitYM[1]);
-            DateTime min = new DateTime(year, month, 1);
-            DateTime max = new DateTime(year, month,DateTime.DaysInMonth(year,month));
+            DateTime min = new(year, month, 1);
+            DateTime max = new(year, month,DateTime.DaysInMonth(year,month));
 
             var listRequest = new EventsResource.ListRequest(service, GymRecordCalendar)
             {
@@ -75,49 +75,42 @@ namespace NoobowNotifier.Logics
                 ApplicationName = "SwimRecord",
             });
 
-            Event swimReccord = new()
-            {
-                Summary = SwimMark,
-                Start = new EventDateTime() { Date = recordDate },
-                End = new EventDateTime() { Date = recordDate },
-                Transparency = "transparent"
-            };
-            var recordRequest = new EventsResource.InsertRequest(service,swimReccord,GymRecordCalendar);
-
             try
             {
-                recordRequest.Execute();
-
                 string[] splitDate = recordDate.Split("-");
                 int year = int.Parse(splitDate[0]);
                 int month = int.Parse(splitDate[1]);
-                DateTime min = new DateTime(year, month, 1);
-                DateTime max = new DateTime(year, month, DateTime.DaysInMonth(year, month));
+                DateTime min = new(year, month, 1);
+                DateTime max = new(year, month, DateTime.DaysInMonth(year, month));
 
                 var listRequest = new EventsResource.ListRequest(service, GymRecordCalendar)
                 {
                     TimeMin = min,
                     TimeMax = max
                 };
-
                 var eventList = listRequest.Execute();
-                if (eventList.Items.Count > 0)
+                if(eventList.Items.Where(e => e.Start.Date == recordDate).Any())
                 {
-                    foreach (var e in eventList.Items)
-                    {
-                        if (SwimMarkCountTargeet.Contains(e.Summary))
-                        {
-                            swimCount++;
-                        }
-                    }
+                    return 0;
                 }
+                swimCount = eventList.Items.Where(e => SwimMarkCountTargeet.Contains(e.Summary)).Count();
+
+                Event swimReccord = new()
+                {
+                    Summary = SwimMark,
+                    Start = new EventDateTime() { Date = recordDate },
+                    End = new EventDateTime() { Date = recordDate },
+                    Transparency = "transparent"
+                };
+                var recordRequest = new EventsResource.InsertRequest(service, swimReccord, GymRecordCalendar);
+                recordRequest.Execute();
             }
             catch (Exception ex)
             {
                 return -1;
             }
 
-            return swimCount;
+            return swimCount+1;
         }
 
     }
