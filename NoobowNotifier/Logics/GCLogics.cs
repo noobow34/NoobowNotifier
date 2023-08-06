@@ -36,7 +36,7 @@ namespace NoobowNotifier.Logics
             int year = int.Parse(splitYM[0]);
             int month = int.Parse(splitYM[1]);
             DateTime min = new(year, month, 1);
-            DateTime max = new(year, month,DateTime.DaysInMonth(year,month));
+            DateTime max = new(year, month,DateTime.DaysInMonth(year,month),23,59,59);
 
             var listRequest = new EventsResource.ListRequest(service, GymRecordCalendar)
             {
