@@ -13,8 +13,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Noobow.Commons.Constants;
 using Noobow.Commons.EF;
-using Noobow.Commons.EF.Twitter;
-using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
 
 namespace NoobowNotifier
 {
@@ -35,10 +33,10 @@ namespace NoobowNotifier
             var config = new ConfigurationBuilder().SetBasePath(Environment.CurrentDirectory).AddJsonFile("appsettings.json").Build();
             AppConfig.ToolsConnectionString = config.GetConnectionString("ToolsConnection");
             AppConfig.ToolsOption = new DbContextOptionsBuilder<ToolsContext>();
-            AppConfig.ToolsOption/*.UseLoggerFactory(loggerFactory)*/.UseMySql(AppConfig.ToolsConnectionString, new MariaDbServerVersion(new Version(10, 4)));
+            AppConfig.ToolsOption/*.UseLoggerFactory(loggerFactory)*/.UseNpgsql(AppConfig.ToolsConnectionString);
             _services.AddDbContext<ToolsContext>(
-                options => options/*.UseLoggerFactory(loggerFactory)*/.UseMySql(AppConfig.ToolsConnectionString, new MariaDbServerVersion(new Version(10, 4))
-            ));
+                options => options/*.UseLoggerFactory(loggerFactory)*/.UseNpgsql(AppConfig.ToolsConnectionString)
+            );
 
             _provider = _services.BuildServiceProvider();
             _context = _provider.GetService<ToolsContext>();
@@ -79,53 +77,6 @@ namespace NoobowNotifier
                     _= executer.ExecuteAsync();
                 });
             }
-        }
-
-        private static void RegisterNewUsers(IEnumerable<User> users, List<long> ids, TwitterContext context, FollowsTypeEnum followType, string owner)
-        {
-            foreach (long? id in ids)
-            {
-                var user = users.Where(u => u.Id == id).SingleOrDefault();
-                if (user != null)
-                {
-                    var fu = context.FollowsUsers.Where(e => e.Owner == owner && e.UserId == id && e.FollowsType == followType).SingleOrDefault();
-                    if (fu == null)
-                    {
-                        context.FollowsUsers.Add(new FollowsUser() { Owner = owner, UserId = user.Id, ScreenName = user.ScreenName, Name = user.Name, FollowsType = followType, Status = FollowsStatusEnum.Active });
-                    }
-                    else
-                    {
-                        fu.Status = FollowsStatusEnum.Active;
-                        fu.Name = user.Name;
-                        fu.ScreenName = user.ScreenName;
-                    }
-                }
-            }
-            context.SaveChanges();
-        }
-
-        private static void ChangeUserToInactive(List<long> ids, TwitterContext context, FollowsTypeEnum followType, string owner)
-        {
-            foreach (long? id in ids)
-            {
-                var fu = context.FollowsUsers.Where(e => e.Owner == owner && e.UserId == id && e.FollowsType == followType).SingleOrDefault();
-                if (fu != null)
-                {
-                    fu.Status = FollowsStatusEnum.Inactive;
-                }
-            }
-            context.SaveChanges();
-        }
-
-        private static void ProcessTargetUsers(IEnumerable<dynamic> users, List<long> ids, FollowsEventTypeEnum eventType, DateTime execDatetime, TwitterContext context)
-        {
-            foreach (var id in ids)
-            {
-                int followsId = users.Where(fu => fu.UserId == id).SingleOrDefault().FollowsId;
-                int sameHistroyCount = context.FollowsEvents.Where(f => f.FollowsId == followsId && f.EventType == eventType).Count();
-                context.FollowsEvents.Add(new FollowsEvent { EventDate = execDatetime, FollowsId = followsId, EventType = eventType, SameHistoryCount = sameHistroyCount });
-            }
-            context.SaveChanges();
         }
 
         private static IEnumerable<IEnumerable<T>> Chunk<T>(IEnumerable<T> list, int size)

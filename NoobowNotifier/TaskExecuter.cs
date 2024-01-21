@@ -6,7 +6,6 @@ using Noobow.Commons.Constants;
 using Noobow.Commons.EF;
 using NoobowNotifier.Constants;
 using NoobowNotifier.Manager;
-using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
 using System;
 using System.Collections.Generic;
 using System.Linq;

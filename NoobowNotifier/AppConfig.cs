@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Noobow.Commons.EF;
-using Noobow.Commons.EF.Twitter;
 using System;
 using System.Collections.Generic;
 using System.Linq;
