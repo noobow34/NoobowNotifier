@@ -9,9 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
 using System;
-using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
 using Noobow.Commons.EF;
-using Noobow.Commons.EF.Twitter;
 using Microsoft.Extensions.Hosting;
 
 namespace NoobowNotifier
@@ -30,11 +28,11 @@ namespace NoobowNotifier
             var loggerFactory = LoggerFactory.Create(builder => builder.AddConsole());
 
             services.AddDbContextPool<jafleetContext>(
-                options => options/*.UseLoggerFactory(loggerFactory)*/.UseMySql(Configuration.GetConnectionString("DefaultConnection"), new MariaDbServerVersion(new Version(10, 4))
-            ));
+                options => options/*.UseLoggerFactory(loggerFactory)*/.UseNpgsql(Configuration.GetConnectionString("DefaultConnection"))
+            );
             services.AddDbContextPool<ToolsContext>(
-                options => options/*.UseLoggerFactory(loggerFactory)*/.UseMySql(Configuration.GetConnectionString("ToolsConnection"), new MariaDbServerVersion(new Version(10, 4))
-            ));
+                options => options/*.UseLoggerFactory(loggerFactory)*/.UseNpgsql(Configuration.GetConnectionString("ToolsConnection"))
+            );
 
             services.AddMvc().AddNewtonsoftJson();
             services.Configure<AppSettings>(Configuration);
