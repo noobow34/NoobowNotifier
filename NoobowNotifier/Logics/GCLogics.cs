@@ -40,8 +40,8 @@ namespace NoobowNotifier.Logics
 
             var listRequest = new EventsResource.ListRequest(service, GymRecordCalendar)
             {
-                TimeMin = min,
-                TimeMax = max
+                TimeMinDateTimeOffset = min,
+                TimeMaxDateTimeOffset = max
             };
 
             int swimCount = 0;
@@ -62,7 +62,7 @@ namespace NoobowNotifier.Logics
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return "検索失敗(;_;)";
             }
@@ -87,8 +87,8 @@ namespace NoobowNotifier.Logics
 
                 var listRequest = new EventsResource.ListRequest(service, GymRecordCalendar)
                 {
-                    TimeMin = min,
-                    TimeMax = max
+                    TimeMinDateTimeOffset = min,
+                    TimeMaxDateTimeOffset = max
                 };
                 var eventList = listRequest.Execute();
                 if(eventList.Items.Where(e => e.Start.Date == recordDate).Any())
@@ -107,7 +107,7 @@ namespace NoobowNotifier.Logics
                 var recordRequest = new EventsResource.InsertRequest(service, swimReccord, GymRecordCalendar);
                 recordRequest.Execute();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return -1;
             }
