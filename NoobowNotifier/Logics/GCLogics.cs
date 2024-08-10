@@ -50,12 +50,14 @@ namespace NoobowNotifier.Logics
                 var eventList = listRequest.Execute();
                 if (eventList.Items.Count > 0)
                 {
-                    foreach (var e in eventList.Items)
+                    var swimList = eventList.Items.Select((s,d) => (s.Summary,s.Start.Date)).ToList();
+                    swimList.Sort((a, b) => string.Compare(a.Date, b.Date));
+                    foreach (var e in swimList)
                     {
                         if (SwimMarkCountTargeet.Contains(e.Summary))
                         {
                             swimCount++;
-                            result.Append(e.Start.Date + "<br>");
+                            result.Append(e.Date + "<br>");
                         }
                     }
                 }
