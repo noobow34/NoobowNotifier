@@ -2,14 +2,9 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using NoobowNotifier.Models;
-using NoobowNotifier.Middleware;
 using jafleet.Commons.EF;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
-using System;
-using Noobow.Commons.EF;
 using Microsoft.Extensions.Hosting;
 
 namespace NoobowNotifier
@@ -28,14 +23,10 @@ namespace NoobowNotifier
             var loggerFactory = LoggerFactory.Create(builder => builder.AddConsole());
 
             services.AddDbContextPool<jafleetContext>(
-                options => options/*.UseLoggerFactory(loggerFactory)*/.UseNpgsql(Configuration.GetConnectionString("DefaultConnection"))
-            );
-            services.AddDbContextPool<ToolsContext>(
-                options => options/*.UseLoggerFactory(loggerFactory)*/.UseNpgsql(Configuration.GetConnectionString("ToolsConnection"))
+                options => options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection"))
             );
 
             services.AddMvc().AddNewtonsoftJson();
-            services.Configure<AppSettings>(Configuration);
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -44,7 +35,6 @@ namespace NoobowNotifier
             {
                 app.UseDeveloperExceptionPage();
             }
-            app.UseLineValidationMiddleware(Configuration.GetSection("LineSettings")["ChannelSecret"]);
             app.UseStaticFiles();
             app.UseRouting();
             app.UseEndpoints(endpoints =>

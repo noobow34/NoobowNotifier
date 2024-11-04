@@ -1,11 +1,5 @@
-﻿using Google.Apis.AnalyticsReporting.v4;
-using Google.Apis.AnalyticsReporting.v4.Data;
-using Google.Apis.Auth.OAuth2;
-using System;
-using System.Collections.Generic;
+﻿using Google.Apis.Auth.OAuth2;
 using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace NoobowNotifier.Services
 {

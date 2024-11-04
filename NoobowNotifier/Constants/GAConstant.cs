@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace NoobowNotifier.Constants
+﻿namespace NoobowNotifier.Constants
 {
     public static class GAConstant
     {

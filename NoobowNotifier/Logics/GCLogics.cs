@@ -1,14 +1,8 @@
 ﻿using Google.Apis.Calendar.v3;
 using Google.Apis.Calendar.v3.Data;
 using Google.Apis.Services;
-using jafleet.Commons.EF;
-using Microsoft.AspNetCore.SignalR.Protocol;
-using Microsoft.EntityFrameworkCore.Metadata.Conventions;
 using NoobowNotifier.Constants;
-using NoobowNotifier.Services;
-using NuGet.DependencyResolver;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 

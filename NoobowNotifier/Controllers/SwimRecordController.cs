@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using NoobowNotifier.Logics;
-using System;
 
 namespace NoobowNotifier.Controllers
 {
